@@ -1,0 +1,50 @@
+version: 2
+executorType: docker
+containerInfo:
+  - image: quay.io/netguru/ng-ruby:2.2.3
+  # may be needed to get postgresql here
+stages:
+  build:
+    workDir: /home/ubuntu/props
+    steps:
+      - type: checkout
+      - type: shell
+        name: Install System Dependencies
+        command: apt-get update -qq && apt-get install -y build-essential libmysqlclient-dev nodejs
+      - type: shell
+        name: Get Yarn Dependencies
+        command: yarn
+      - type: shell
+        name: Copy Secrets
+        command: cp config/secrets.yml.sample config/secrets.yml
+      - type: shell
+        name: Install Ruby Dependencies
+        command: bundle install
+      - type: shell
+        name: Create DB
+        command: bundle exec rake db:create db:schema:load --trace
+      - type: shell
+        name: DB Migrations
+        command: bundle exec rake db:migrate
+        #caching to be added
+      - type: shell
+        name: Run Yarn Tests
+        command: yarn test
+      - type: shell
+        name: Run Rspec Tests
+        command: bundle exec rspec --colour --profile 10 --order rand spec --format progress
+  deployment:
+    workDir: /home/ubuntu/props
+    steps:
+      - type: deploy
+        name: "Deploy to staging"
+      command: |
+        if [ "${CIRCLE_BRANCH}" == "mobile" ]; then
+          git push git@heroku.com:netguru-props-staging.git
+        fi
+      - type: shell
+        name: "Deploy to production"
+      command: |
+        if [ "${CIRCLE_BRANCH}" == "master" ]; then
+          bundle exec cap production deploy
+        fi
