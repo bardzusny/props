@@ -45,6 +45,6 @@ stages:
       - type: shell
         name: "Deploy to production"
       command: |
-        if [ "${CIRCLE_BRANCH}" == "master" ]; then
+        if [ "${CIRCLE_BRANCH}" == "production" ]; then
           bundle exec cap production deploy
         fi
