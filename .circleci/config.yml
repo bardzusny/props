@@ -37,14 +37,14 @@ stages:
     workDir: /home/ubuntu/props
     steps:
       - type: deploy
-        name: "Deploy to staging"
-      command: |
-        if [ "${CIRCLE_BRANCH}" == "mobile" ]; then
-          git push git@heroku.com:netguru-props-staging.git
-        fi
+        name: Deploy To Staging
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "mobile" ]; then
+            git push git@heroku.com:netguru-props-staging.git
+          fi
       - type: shell
         name: "Deploy to production"
-      command: |
-        if [ "${CIRCLE_BRANCH}" == "production" ]; then
-          bundle exec cap production deploy
-        fi
+        command: |
+          if [ "${CIRCLE_BRANCH}" == "production" ]; then
+            bundle exec cap production deploy
+          fi
