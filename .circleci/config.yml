@@ -10,7 +10,10 @@ stages:
       - type: checkout
       - type: shell
         name: Install System Dependencies
-        command: apt-get update -qq && apt-get install -y build-essential libmysqlclient-dev nodejs
+        command: apt-get update && apt-get install -y libpq-dev
+      - type: shell
+        name: Install Node
+        command: /opt/node/install
       - type: shell
         name: Install Yarn
         command: |
