@@ -2,6 +2,9 @@ version: 2
 executorType: docker
 containerInfo:
   - image: quay.io/netguru/ng-ruby:2.2.3
+    env:
+        - RAILS_ENV=test
+  - image: postgres:9.5
   # may be needed to get postgresql here
 stages:
   build:
