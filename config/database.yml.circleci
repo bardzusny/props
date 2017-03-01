@@ -1,9 +1,0 @@
-test:
-  adapter:  postgresql
-  host:     localhost
-  encoding: unicode
-  database: props_test
-  pool:     5
-  username: props
-  password:
-  template: template0

@@ -34,6 +34,9 @@ stages:
         name: Install Ruby Dependencies
         command: bundle install
       - type: shell
+        name: Copy database.yml
+        command: cp config/database.yml.sample config/database.yml
+      - type: shell
         name: Create DB
         command: bundle exec rake db:create db:schema:load --trace
       - type: shell
