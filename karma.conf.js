@@ -11,7 +11,7 @@ module.exports = function (config) {
   config.customLaunchers = {
     chrome_ci: {
       base: 'Chrome',
-      flags: ['--no-sandbox'];
+      flags: ['--no-sandbox'],
     };
   };
   if (process.env.CIRCLECI) {
