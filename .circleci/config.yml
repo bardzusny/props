@@ -15,7 +15,8 @@ stages:
   build:
     workDir: /home/ubuntu/props
     environment:
-      - CHROME_BIN: google-chrome
+      - CHROME_BIN: /usr/bin/google-chrome
+      - DISPLAY: :99.0
     steps:
       - type: checkout
       - type: shell
@@ -34,6 +35,15 @@ stages:
       - type: shell
         name: Get Yarn Dependencies
         command: yarn
+      - type: shell
+        name: Get Chrome for Karma
+        command: |
+          sh -e /etc/init.d/xvfb start
+          apt-get update
+          apt-get install xvfb chromium-browser
+          apt-get install -y libappindicator1 fonts-liberation
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          dpkg -i google-chrome*.deb
       - type: shell
         name: Copy Secrets
         command: cp config/secrets.yml.sample config/secrets.yml
