@@ -3,8 +3,11 @@ executorType: docker
 containerInfo:
   - image: quay.io/netguru/ng-ruby:2.2.3
     env:
-        - RAILS_ENV=test
+      - RAILS_ENV=test
   - image: postgres:9.5
+    env:
+      - POSTGRES_USER=ubuntu
+      - POSTGRES_DB=circle_ruby_test
 stages:
   build:
     workDir: /home/ubuntu/props
