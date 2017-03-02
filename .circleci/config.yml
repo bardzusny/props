@@ -5,7 +5,6 @@ containerInfo:
     env:
         - RAILS_ENV=test
   - image: postgres:9.5
-  # may be needed to get postgresql here
 stages:
   build:
     workDir: /home/ubuntu/props
@@ -35,7 +34,7 @@ stages:
         command: bundle install
       - type: shell
         name: Copy database.yml
-        command: cp config/database.yml.sample config/database.yml
+        command: cp config/database.yml.circleci config/database.yml
       - type: shell
         name: Create DB
         command: bundle exec rake db:create db:schema:load --trace
