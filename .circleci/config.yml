@@ -36,14 +36,15 @@ stages:
         name: Get Yarn Dependencies
         command: yarn
       - type: shell
-        name: Get Chrome for Karma
+        name: Install Chrome and Xvfb
         command: |
-          sh -e /etc/init.d/xvfb start
           apt-get update
-          apt-get install xvfb chromium-browser
           apt-get install -y libappindicator1 fonts-liberation
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          dpkg -i google-chrome*.deb
+          dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+          apt-get install xorg
+          apt-get install xvfb
+          apt-get install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
       - type: shell
         name: Copy Secrets
         command: cp config/secrets.yml.sample config/secrets.yml
@@ -59,6 +60,10 @@ stages:
       - type: shell
         name: DB Migrations
         command: bundle exec rake db:migrate
+      - type: shell
+        name: Starting Xvfb (for Browser Tests)
+        command: Xvfb :99 -screen 0 1280x1024x24
+        background: true
         #caching to be added
       - type: shell
         name: Run Yarn Tests
