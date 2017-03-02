@@ -7,6 +7,7 @@ containerInfo:
       - RACK_ENV=test
       - PG_HOST=localhost
       - PG_USER=ubuntu
+      - CHROME_BIN=google-chrome
   - image: postgres:9.5
     env:
       - POSTGRES_USER=ubuntu
