@@ -47,9 +47,9 @@ stages:
         name: Install Xvfb
         command: |
           apt-get update
-          apt-get install xorg
-          apt-get install xvfb
-          apt-get install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
+          apt-get -y install xorg
+          apt-get -y install xvfb
+          apt-get -y install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
       - type: shell
         name: Copy Secrets
         command: cp config/secrets.yml.sample config/secrets.yml
