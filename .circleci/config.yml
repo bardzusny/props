@@ -40,7 +40,7 @@ stages:
         command: |
           apt-get update
           apt-get install -y libappindicator1 fonts-liberation
-          apt-get install -y gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1
+          apt-get install -y gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1 libxss1 xdg-utils
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
       - type: shell
