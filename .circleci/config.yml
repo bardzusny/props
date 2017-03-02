@@ -4,6 +4,9 @@ containerInfo:
   - image: quay.io/netguru/ng-ruby:2.2.3
     env:
       - RAILS_ENV=test
+      - RACK_ENV=test
+      - PG_HOST=localhost
+      - PG_USER=ubuntu
   - image: postgres:9.5
     env:
       - POSTGRES_USER=ubuntu
