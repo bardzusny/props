@@ -11,11 +11,10 @@ module.exports = function (config) {
   config.customLaunchers = {
     chrome_ci: {
       base: 'Chrome',
-      flags: ['--no-sandbox']
-
-    }
-  }
+      flags: ['--no-sandbox'];
+    };
+  };
   if (process.env.CIRCLECI) {
-    config.browsers = ['chrome_ci']
+    config.browsers = ['chrome_ci'];
   }
 };
