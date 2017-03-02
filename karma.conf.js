@@ -12,7 +12,7 @@ module.exports = function (config) {
     chrome_ci: {
       base: 'Chrome',
       flags: ['--no-sandbox'],
-    };
+    },
   };
   if (process.env.CIRCLECI) {
     config.browsers = ['chrome_ci'];
