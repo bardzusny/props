@@ -40,8 +40,8 @@ stages:
         command: |
           apt-get update
           apt-get install -y libappindicator1 fonts-liberation
+          apt-get install gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          apt-get -f install
           dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
       - type: shell
         name: Install Xvfb
