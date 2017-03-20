@@ -1,93 +1,90 @@
 #caching to be added
+#add notifier
 version: 2
-executorType: docker
-containerInfo:
-  - image: quay.io/netguru/ng-ruby:2.2.3
-    env:
-      - RAILS_ENV=test
-      - RACK_ENV=test
-      - PG_HOST=localhost
-      - PG_USER=ubuntu
-  - image: postgres:9.5
-    env:
-      - POSTGRES_USER=ubuntu
-      - POSTGRES_DB=circle_ruby_test
-stages:
+jobs:
   build:
-    workDir: /home/ubuntu/props
+    working_directory: /home/ubuntu/props
+    docker:
+      - image: quay.io/netguru/ng-ruby:2.2.3
+        env:
+          - RAILS_ENV=test
+          - RACK_ENV=test
+          - PG_HOST=localhost
+          - PG_USER=ubuntu
+      - image: postgres:9.5
+        env:
+          - POSTGRES_USER=ubuntu
+          - POSTGRES_DB=circle_ruby_test
     environment:
       - CHROME_BIN: /usr/bin/google-chrome
       - DISPLAY: :99.0
     steps:
-      - type: checkout
-      - type: shell
-        name: Install System Dependencies
-        command: apt-get update && apt-get install -y libpq-dev
-      - type: shell
-        name: Install Node
-        command: /opt/node/install
-      - type: shell
-        name: Install Yarn
-        command: |
-          apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
-          echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-          apt-get update -qq
-          apt-get install -y -qq yarn
-      - type: shell
-        name: Get Yarn Dependencies
-        command: yarn
-      - type: shell
-        name: Install Chrome
-        command: |
-          apt-get update
-          apt-get install -y libappindicator1 fonts-liberation
-          apt-get install -y gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1 libxss1 xdg-utils
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
-      - type: shell
-        name: Install Xvfb
-        command: |
-          apt-get update
-          apt-get -y install xorg
-          apt-get -y install xvfb
-          apt-get -y install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
-      - type: shell
-        name: Copy Secrets
-        command: cp config/secrets.yml.sample config/secrets.yml
-      - type: shell
-        name: Install Ruby Dependencies
-        command: bundle install
-      - type: shell
-        name: Copy database.yml
-        command: cp config/database.yml.circleci config/database.yml
-      - type: shell
-        name: Create DB
-        command: bundle exec rake db:create db:schema:load --trace
-      - type: shell
-        name: DB Migrations
-        command: bundle exec rake db:migrate
-      - type: shell
-        name: Starting Xvfb (for Browser Tests)
-        command: Xvfb :99 -screen 0 1280x1024x24
-        background: true
-      - type: shell
-        name: Run Yarn Tests
-        command: yarn test
-      - type: shell
-        name: Run Rspec Tests
-        command: bundle exec rspec --colour --profile 10 --order rand spec --format progress
-  deployment:
-    workDir: /home/ubuntu/props
-    steps:
-      - type: deploy
-        name: Deploy To Staging
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "mobile" ]; then
-            git push git@heroku.com:netguru-props-staging.git
-          fi
-      - type: shell
-        name: "Deploy to production"
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "production" ]; then
-            bundle exec cap production deploy
-          fi
+      - checkout
+      - run:
+          name: Install System Dependencies
+          command: apt-get update && apt-get install -y libpq-dev
+      - run:
+          name: Install Node
+          command: /opt/node/install
+      - run:
+          name: Install Yarn
+          command: |
+            apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
+            echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+            apt-get update -qq
+            apt-get install -y -qq yarn
+      - run:
+          name: Get Yarn Dependencies
+          command: yarn
+      - run:
+          name: Install Chrome
+          command: |
+            apt-get update
+            apt-get install -y libappindicator1 fonts-liberation
+            apt-get install -y gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1 libxss1 xdg-utils
+            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+      - run:
+          name: Install Xvfb
+          command: |
+            apt-get update
+            apt-get -y install xorg
+            apt-get -y install xvfb
+            apt-get -y install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
+      - run:
+          name: Copy Secrets
+          command: cp config/secrets.yml.sample config/secrets.yml
+      - run:
+          name: Install Ruby Dependencies
+          command: bundle install
+      - run:
+          name: Copy database.yml
+          command: cp config/database.yml.circleci config/database.yml
+      - run:
+          name: Create DB
+          command: bundle exec rake db:create db:schema:load --trace
+      - run:
+          name: DB Migrations
+          command: bundle exec rake db:migrate
+      - run:
+          name: Starting Xvfb (for Browser Tests)
+          command: Xvfb :99 -screen 0 1280x1024x24
+          background: true
+      - run:
+          name: Run Yarn Tests
+          command: yarn test
+      - run:
+          name: Run Rspec Tests
+          command: bundle exec rspec --colour --profile 10 --order rand spec --format progress
+      - deploy:
+          name: Deploy To Staging
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "mobile" ]; then
+              git push git@heroku.com:netguru-props-staging.git
+            fi
+      - deploy:
+          name: "Deploy to production"
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "production" ]; then
+              bundle exec cap production deploy
+            fi
