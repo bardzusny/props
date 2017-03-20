@@ -12,7 +12,8 @@ jobs:
           - PG_HOST=localhost
           - PG_USER=ubuntu
       - image: postgres:9.5
-        env:
+        #lub po prostu env:
+        environment:
           - POSTGRES_USER=ubuntu
           - POSTGRES_DB=circle_ruby_test
     environment:
