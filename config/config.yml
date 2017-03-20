@@ -36,10 +36,11 @@ production:
   auth0_api_client_id: <%= ENV['AUTH0_API_CLIENT_ID'] %>
   auth0_api_client_secret: <%= ENV['AUTH0_API_CLIENT_SECRET'] %>
   auth0_api_audience: <%= ENV['AUTH0_API_AUDIENCE'] %>
-  auth0_domain: <%= ['AUTH0_DOMAIN'] %>
+  auth0_domain: <%= ENV['AUTH0_DOMAIN'] %>
   secret_key_base: <%= ENV['SECRET_KEY_BASE'] %>
   sendgrid_password: <%= ENV['SENDGRID_PASSWORD'] %>
   sendgrid_user_name: <%= ENV['SENDGRID_USER_NAME'] %>
+  rollbar_access_token: <%= ENV['ROLLBAR_ACCESS_TOKEN'] %>
   slack:
     default_channel: <%= ENV['SLACK_DEFAULT_CHANNEL'] %>
     token: <%= ENV['SLACK_TOKEN'] %>
