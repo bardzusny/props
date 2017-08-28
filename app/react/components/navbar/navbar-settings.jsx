@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 export default class NavbarSettings extends React.Component {
   static get propTypes() {
@@ -8,6 +8,7 @@ export default class NavbarSettings extends React.Component {
         email: PropTypes.string,
       }),
       userSignedIn: PropTypes.bool.isRequired,
+      currentOrganisation: PropTypes.string,
     };
   }
 
@@ -18,11 +19,13 @@ export default class NavbarSettings extends React.Component {
 
     return (
       <li className="dropdown">
-        <a className="dropdown-toggle"
+        <a
+          className="dropdown-toggle"
           data-toggle="dropdown"
-          href="#">
-          {`${this.props.user.name} (${this.props.user.email})`}
-          <span className="caret"/>
+          href="dropdown-menu"
+        >
+          <span>{`${this.props.currentOrganisation} -  ${this.props.user.name} (${this.props.user.email})`}</span>
+          <span className="caret" />
         </a>
         <ul className="dropdown-menu" role="menu">
           <li><a href="/settings">Settings</a></li>

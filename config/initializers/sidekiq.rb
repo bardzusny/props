@@ -9,3 +9,8 @@ end
 if Rails.env.test?
   Sidekiq.logger = nil
 end
+
+if Rails.env.development?
+  require 'sidekiq/testing'
+  Sidekiq::Testing.inline!
+end

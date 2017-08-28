@@ -1,6 +1,6 @@
 module Props
   class UndoUpvote
-    pattr_initialize [:prop!, :user!, :upvotes_repository!]
+    pattr_initialize %i(prop! user! upvotes_repository!)
 
     def call
       upvote = upvotes_repository.remove(prop, user)

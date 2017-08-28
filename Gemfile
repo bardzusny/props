@@ -2,43 +2,44 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4'
 
+gem 'dotenv-rails', require: 'dotenv/rails-now', groups: %i(development test)
+
 gem 'active_model_serializers', git: 'https://github.com/rails-api/active_model_serializers', branch: '0-9-stable'
 gem 'airbrussh'
 gem 'animate-rails'
 gem 'app_konfig'
 gem 'attr_extras'
+gem 'auth0'
 gem 'celluloid-io', require: ['celluloid/current', 'celluloid/io']
-gem 'coffee-rails'
+gem 'crono'
 gem 'decent_exposure'
 gem 'easy_tokens'
-gem 'gon'
 gem 'grape'
 gem 'grape-entity'
 gem 'grape-swagger'
 gem 'grape-swagger-rails'
 gem 'gravatar-ultimate'
 gem 'haml-rails'
-gem 'haml_coffee_assets', '1.16.1' # remove this gem from Gemfile after getting rid of js_stack
 gem 'hashie-forbidden_attributes'
 gem 'jquery-rails'
-gem 'js_stack'
 gem 'kaminari'
 gem 'lograge'
 gem 'netguru_theme'
 gem 'omniauth'
-gem 'omniauth-google-oauth2'
-gem 'auth0'
+gem 'omniauth-slack'
 gem 'pg'
+gem 'pundit'
 gem 'react_webpack_rails'
 gem 'redis-namespace'
 gem 'rollbar'
-gem 'sidekiq'
+gem 'rwr-redux'
 gem 'sass-rails'
 gem 'searchlight'
 gem 'sendgrid'
+gem 'sidekiq'
 gem 'skylight'
 gem 'slack-ruby-client'
-gem 'sprockets-rails', '2.3.3' # temporary lock, JST does not work properly with sprockets 3
+gem 'sprockets-rails'
 gem 'thin'
 gem 'uglifier'
 gem 'whenever', require: false
@@ -80,10 +81,12 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'rspec-rails'
+  gem 'timecop'
 end
 
 group :test do
   gem 'codeclimate-test-reporter', require: nil
-  gem 'scrutinizer-ocular'
+  gem 'database_cleaner'
   gem 'email_spec'
+  gem 'shoulda-matchers', '~> 3.1'
 end

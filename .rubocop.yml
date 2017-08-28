@@ -8,16 +8,25 @@ AllCops:
     - 'Gemfile.lock'
     - 'Guardfile'
     - 'Rakefile'
-  TargetRubyVersion: 2.2 # no 2.3 because of frozen strings comment (it's a little bit annoying right now
+  TargetRubyVersion: 2.3
 Documentation:
   Enabled: false
 Metrics/LineLength:
   Max: 100
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
 Rails/ActionFilter:
+  Enabled: false
+Rails/DynamicFindBy:
+  Enabled: false
+Rails/HttpPositionalArguments:
   Enabled: false
 Style/DotPosition:
   EnforcedStyle: leading
 SignalException:
+  Enabled: false
+Style/FrozenStringLiteralComment:
   Enabled: false
 Style/StringLiterals:
   EnforcedStyle: single_quotes
@@ -27,6 +36,11 @@ Style/TrailingCommaInLiteral:
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
   Enabled: true
+Style/PercentLiteralDelimiters:
+  Enabled: true
+  PreferredDelimiters:
+    '%w': '()'
+    '%i': '()'
 Style/PredicateName:
   Exclude:
     - 'app/serializers/**/*'

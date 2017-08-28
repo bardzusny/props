@@ -6,7 +6,9 @@ class Prop < ActiveRecord::Base
   has_many :prop_receivers
   has_many :upvotes
   belongs_to :propser, class_name: 'User'
+  belongs_to :organisation
 
+  validates :organisation, presence: true
   validates :propser, presence: true
   validate :prop_receivers?, :valid_prop_receivers?, :selfpropsing, :receivers_limit
   validates :body,
@@ -16,6 +18,7 @@ class Prop < ActiveRecord::Base
   scope :with_includes, -> { includes(:users, :propser) }
   scope :ordered, -> { order('props.created_at DESC') }
   scope :not_notified, -> { where(slack_ts: nil) }
+  scope :oldest_first, -> { order(:created_at) }
 
   def rating
     upvotes_count

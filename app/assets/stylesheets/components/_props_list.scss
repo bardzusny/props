@@ -10,7 +10,11 @@
 
 .prop-users {
   position: relative;
+  padding-top: 10px;
+  padding-bottom: 20px;
+
   img { width: 20px; }
+
   .glyphicon {
     width: 20px;
     line-height: 20px;
@@ -44,6 +48,22 @@
 
 .props-receiver-avatar {
   margin: 0 10px 10px 0;
+  cursor: pointer;
+
+  img {
+    display: block;
+  }
+}
+
+.props-receiver-name {
+  display: block;
+  max-width: 80px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #677581;
+  font-size: 10px;
+  text-align: center;
 }
 .prop-content {
   border-top: 1px solid #ddd;
@@ -52,7 +72,7 @@
 
 .prop-body {
   line-height: 1.2;
-  font-size: 3em;
+  font-size: 26px;
   margin-bottom: 0;
   word-break: break-word;
 
@@ -66,4 +86,13 @@
 
 .prop-footer {
   margin-top: 20px;
+}
+
+.prop-to {
+  color: #f5a122;
+  font-size: 10px;
+
+  @media (min-width: $screen-md-min) {
+    font-size: 22px;
+  }
 }

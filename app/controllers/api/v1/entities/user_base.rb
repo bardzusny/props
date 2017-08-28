@@ -11,7 +11,7 @@ module Api
         private
 
         def avatar_url
-          gravatar_url(object.email)
+          object.avatar || gravatar_url(object.email)
         end
 
         def gravatar_url(email)

@@ -3,7 +3,6 @@ class NotifierJob < ActiveJob::Base
 
   def perform(prop_id)
     notify prop(prop_id)
-
   rescue ActiveRecord::RecordNotFound
     Sidekiq.logger.info "Prop ##{prop_id} has already been posted or doesn't exist!"
   end

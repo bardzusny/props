@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   mount EasyTokens::Engine, at: 'et'
   root 'home#index'
   get 'app' => 'authenticated#main_app'
+  get 'app/*path' => 'authenticated#main_app'
 
   get '/auth/:provider/callback' => 'sessions#create'
   get '/signin' => 'sessions#new', as: :signin
@@ -10,6 +11,7 @@ Rails.application.routes.draw do
 
   resources :settings, only: :index do
     post :apply, on: :collection
+    post :save_slack_channel, on: :collection
   end
 
   mount Api::Base, at: '/api'

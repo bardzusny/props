@@ -6,4 +6,14 @@ RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
   end
+
+  config.around(:each) do |example|
+    Timecop.freeze if freeze_time?
+    example.run
+    Timecop.return if freeze_time?
+  end
+
+  def freeze_time?
+    RSpec.current_example.metadata[:freeze_time]
+  end
 end

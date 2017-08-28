@@ -23,4 +23,19 @@
           = label_tag do
             = f.radio_button("interval", "weekly")
             Weekly
-      = f.submit
+      = f.submit "Update Mail Subscription", class: 'btn btn-primary'
+- if current_user.admin?
+  .row
+    .col-xs-12
+      %h2 Notifications Channel
+      = form_for organisation, url: save_slack_channel_settings_path, method: :post do |f|
+        .form-group
+          = f.text_field :slack_channel
+          %p
+            If not set, default Slack channel is
+            %code= AppConfig.slack.default_channel
+        = f.submit "Update Slack Channel", class: 'btn btn-primary'
+      %h2 Sync users with Slack organisation
+      %p Users will be updated to the Slack state. Avatars and names will be updated and new users created.
+      %p Users deleted from the Slack organisation will be archived in Kudos.
+      = link_to("Sync users with Slack", "/api/v1/users/download_users", method: :post, class: 'btn btn-primary')

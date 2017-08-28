@@ -1,5 +1,5 @@
 module Response
   class Base
-    vattr_initialize [:data, :errors, :content]
+    vattr_initialize %i(data errors content)
   end
 end

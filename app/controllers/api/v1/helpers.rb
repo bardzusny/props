@@ -2,12 +2,17 @@ module Api
   module V1
     module Helpers
       extend Grape::API::Helpers
-      def current_user
-        @current_user ||= session_user || api_user
-      end
+      include SessionHelpers
+      include Pundit
+
+      PERMITED_BOT = 'Slackbot 1.0 (+https://api.slack.com/robots)'.freeze
 
       def authenticate_user!
         error!('401 Unauthorized', 401) if current_user.nil?
+      end
+
+      def authenticate_admin!
+        error!('401 Unauthorized', 401) unless current_user.admin?
       end
 
       def require_api_auth!(token)
@@ -20,12 +25,13 @@ module Api
         EasyTokens::Token.exists?(value: token, deactivated_at: nil)
       end
 
-      def api_user
-        EasyTokens::Token.find_by(value: params[:api_key], deactivated_at: nil).try(:owner)
+      def require_user_agent!(user_agent)
+        message = I18n.t('slack_commands.kudos.errors.wrong_user_agent')
+        error!(message, 401) unless permited_bot?(user_agent)
       end
 
-      def session_user
-        User.find_by(id: env['rack.session'][:user_id]) || User.find_by(uid: headers['User-Uid'])
+      def permited_bot?(user_agent)
+        user_agent == PERMITED_BOT
       end
     end
   end

@@ -19,7 +19,11 @@ module Api
         end
 
         def user_props_repository
-          UserPropsRepository.new(object)
+          UserPropsRepository.new(object, organisation)
+        end
+
+        def organisation
+          options[:organisation]
         end
       end
     end

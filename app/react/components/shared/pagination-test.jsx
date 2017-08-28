@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import expect from 'expect';
 
-import Pagination from './pagination';
+import Pagination from './Pagination.jsx';
 
 describe('shared/pagination', () => {
   const onPrevePageClick = expect.createSpy();

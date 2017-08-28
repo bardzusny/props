@@ -1,8 +1,8 @@
 module ApiHelpers
-  def sign_in(user)
+  def sign_in(membership)
     Grape::Endpoint.before_each do |endpoint|
       allow(endpoint).to receive(:authenticate_user!) { true }
-      allow(endpoint).to receive(:current_user) { user }
+      allow(endpoint).to receive(:current_membership) { membership }
     end
   end
 

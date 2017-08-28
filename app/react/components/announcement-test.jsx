@@ -10,7 +10,7 @@ const props = {
 };
 
 describe('announcement', () => {
-  const component = TestUtils.renderIntoDocument(<Announcement {...props}/>);
+  const component = TestUtils.renderIntoDocument(<Announcement {...props} />);
   const animation = TestUtils.findRenderedComponentWithType(component, ReactCSSTransitionGroup);
 
   it('renders', () => {

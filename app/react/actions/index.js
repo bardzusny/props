@@ -64,7 +64,7 @@ function requestUsers() {
 }
 
 export function fetchUserProps(userId) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(requestUserProps());
     return fetch(`/api/v1/props?user_id=${userId}`, {
       credentials: 'same-origin',
@@ -75,7 +75,7 @@ export function fetchUserProps(userId) {
 }
 
 export function fetchUserGivenProps(userId) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(requestUserGivenProps());
     return fetch(`/api/v1/props?propser_id=${userId}`, {
       credentials: 'same-origin',
@@ -86,7 +86,7 @@ export function fetchUserGivenProps(userId) {
 }
 
 export function fetchUser(userId) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(requestUser());
     return fetch(`/api/v1/users/${userId}`, {
       credentials: 'same-origin',
@@ -97,7 +97,7 @@ export function fetchUser(userId) {
 }
 
 export function fetchUsers() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(requestUsers());
     return fetch('/api/v1/users', {
       credentials: 'same-origin',

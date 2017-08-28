@@ -1,5 +1,0 @@
-.selected-users
-.form-group
-  .users-select
-.form-group
-  %textarea#prop_body.form-control{ name: 'body', rows: 2, placeholder: 'What do you want to thank for?' }

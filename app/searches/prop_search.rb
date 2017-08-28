@@ -1,11 +1,14 @@
 class PropSearch < Searchlight::Search
-
   def base_query
     Prop.with_includes.ordered
   end
 
   def search_user_id
     query.where(prop_receivers: { user_id: user_id })
+  end
+
+  def search_organisation_id
+    query.where(organisation_id: organisation_id)
   end
 
   def search_after

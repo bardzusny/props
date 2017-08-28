@@ -38,7 +38,7 @@ describe('navbar/navbar-settings', () => {
   context('when user is signed in', () => {
     before(() => {
       const props = {
-        user: {name: 'testUser', email: 'testUser@example.com'},
+        user: { name: 'testUser', email: 'testUser@example.com' },
         userSignedIn: true,
       };
 

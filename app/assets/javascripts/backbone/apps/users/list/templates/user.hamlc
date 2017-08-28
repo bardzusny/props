@@ -1,4 +1,0 @@
-%a.thumbnail.user-card{ href: "#users/#{@id}" }
-  %img{ src: @avatar_url }>
-  .caption
-    = @name

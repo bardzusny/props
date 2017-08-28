@@ -9,3 +9,25 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.loader {
+  @include sizing(100% 200px);
+  margin: 100px 0;
+  position: relative;
+
+  &::before {
+    @include absolute(top 50% left 50%);
+    @include sizing(50px);
+    animation: loader .6s linear infinite;
+    border: 5px solid #ccc;
+    border-radius: 50%;
+    border-top-color: #c27809;
+    box-sizing: border-box;
+    content: '';
+    margin: -25px 0 0 -25px;
+  }
+}
+
+@keyframes loader {
+  to {transform: rotate(360deg);}
+}

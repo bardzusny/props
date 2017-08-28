@@ -1,20 +1,32 @@
-import RWR from 'react-webpack-rails';
+import RWR, { integrationsManager } from 'react-webpack-rails';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import RWRRedux from 'rwr-redux';
+
 RWR.run();
+window.React = React;
+window.ReactDOM = ReactDOM;
 
-import PropsListComponent from './components/props';
-import SelectedUsersComponent from './components/selected-users';
-import Select from 'react-select';
-import UserOptionComponent from './components/prop-user-option';
-import UserThumb from './components/user/thumb';
-import AnnouncementComponent from './components/announcement';
+integrationsManager.register('redux-store', RWRRedux.storeIntegrationWrapper);
+integrationsManager.register('redux-container', RWRRedux.containerIntegrationWrapper);
+integrationsManager.register('redux-router', RWRRedux.routerIntegrationWrapper);
+
+
+import Store from './store/configure-store';
+RWRRedux.registerStore('Store', Store);
+
 import NavbarComponent from './components/navbar/navbar';
-import ReduxContainer from './components/redux-container';
 
-RWR.registerComponent('PropsListComponent', PropsListComponent);
-RWR.registerComponent('SelectedUsersComponent', SelectedUsersComponent);
-RWR.registerComponent('Select', Select);
-RWR.registerComponent('UserOptionComponent', UserOptionComponent);
-RWR.registerComponent('UserThumb', UserThumb);
-RWR.registerComponent('AnnouncementComponent', AnnouncementComponent);
 RWR.registerComponent('NavbarComponent', NavbarComponent);
-RWR.registerComponent('ReduxContainer', ReduxContainer);
+
+import Navbar from './containers/Navbar';
+RWRRedux.registerContainer('Navbar', Navbar);
+
+import PropsList from './containers/PropsList';
+RWRRedux.registerContainer('PropsList', PropsList);
+
+import UsersList from './containers/UsersList';
+RWRRedux.registerContainer('UsersList', UsersList);
+
+import MainRoutes from './routes';
+RWRRedux.registerRoutes('MainRoutes', MainRoutes);

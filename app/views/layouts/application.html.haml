@@ -5,19 +5,22 @@
     %title= content_for?(:title) ? yield(:title) : 'Props'
     %meta{ name: "description", content: "#{content_for?(:description) ? yield(:description) : 'Props'}" }
     = stylesheet_link_tag 'application', media: 'all'
+    = stylesheet_link_tag 'react_bundle', media: 'all'
     = javascript_include_tag 'application'
-    = include_gon init: true
     = csrf_meta_tags
   %body
-    #announcements-region
+    = redux_store 'Store', { user: Api::V1::Entities::UserBase.new(current_user) }
     %header
-      = react_component 'NavbarComponent',
-        isOnAppPage: controller_name == 'authenticated',
-        user: Api::V1::Entities::UserBase.new(current_user),
-        userSignedIn: current_user.present?
+      = redux_container 'Navbar',
+        props: { isOnAppPage: controller_name == 'authenticated',
+          user: Api::V1::Entities::UserBase.new(current_user),
+          userSignedIn: current_user.present?,
+          currentOrganisation: (current_organisation.name if user_signed_in?)}
     %main
       .container
         #main-region
+        - if controller_name == 'authenticated'
+          = redux_router 'MainRoutes'
         = yield
     %footer.text-center
       (c)

@@ -1,8 +1,0 @@
-#form-content-region
-- if @footer?
-  %footer.form-footer
-    - if @buttons?
-      %ul.list-inline
-        - for button in @buttons
-          %li.pull-right
-            %button{ disabled: button.disabled?, class: "form-button #{button.className}", data: { form_button: button.type }, type: button.buttonType }= button.text

@@ -9,10 +9,12 @@
     "registerComponent": true,
     "createComponent": true,
     "getComponent": true,
-    "renderComponent": true
+    "renderComponent": true,
+    "jest": true
   },
   "rules": {
     "import/no-unresolved": [0],
-    "import/no-extraneous-dependencies": [0]
-  }
+    "import/no-extraneous-dependencies": [0],
+    "react/no-unused-prop-types": [1, { skipShapeProps: true }]
+  },
 }

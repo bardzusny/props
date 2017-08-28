@@ -6,7 +6,7 @@ namespace :users do
     email = args[:email]
     if email.present?
       user = find_user_by_email email
-      Users::ArchiveUser.new(user).call
+      Users::ArchiveUser.new(user: user).call
       puts "SUCCESS: User #{user} (#{email}) archived."
     else
       fail 'ERROR: please provide an email in order to archive user!'
@@ -17,10 +17,7 @@ namespace :users do
 
   def find_user_by_email(email)
     user = User.where(email: email).first
-    if user.present?
-      user
-    else
-      fail "ERROR: can't find user with email: '#{email}'!"
-    end
+    return user if user.present?
+    fail "ERROR: can't find user with email: '#{email}'!"
   end
 end

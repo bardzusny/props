@@ -1,8 +1,12 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :google_oauth2, AppConfig.omniauth_provider_key, AppConfig.omniauth_provider_secret,
-    {
-      approval_prompt: 'auto',
-      access_type: 'online',
-      hd: AppConfig.domain_name
-    }
+  provider(
+    :slack,
+    AppConfig.slack.client_id,
+    AppConfig.slack.client_secret,
+    scope: 'identify,team:read,users.profile:read,users:read,users:read.email,chat:write:bot',
+  )
+end
+
+OmniAuth.configure do |config|
+  config.failure_raise_out_environments = []
 end

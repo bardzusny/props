@@ -6,6 +6,20 @@ en:
       no_users: 'ooo... not even a single receiver here? Cmon!'
       archived_user: "wait wait... %{name} is archived! Stop hacking!"
       no_upvote: "you didn't upvote that"
+    messages:
+      no_kudos_yet: "Organisation does not have any kudos yet"
+      background_process: "Processing in the background"
+  slack_commands:
+    kudos:
+      errors:
+        wrong_user_agent: "Your request was sent from a prohibited device."
+        prop_receivers_missing: "Who do you want to thank? Please mention someone who is also using Kudos. Use '/kudos help' for more details."
+        params_missing: "Some params are missing... That's all we know. Use '/kudos help' for more details."
+        not_created: "Unfortunately something went wrong. Use '/kudos help' for more details."
+        selfpropsing: "You can't give kudos to yourself! Use '/kudos help' for more details."
+      messages:
+        created: "Kudos was created successfully!"    
+      help: "How to send Kudos? For example: /kudos The best team ever!! @susan @john @terry"
   activerecord:
     errors:
       models:

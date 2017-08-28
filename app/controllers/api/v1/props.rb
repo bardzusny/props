@@ -12,7 +12,7 @@ module Api
             next_page: collection.next_page,
             prev_page: collection.prev_page,
             total_pages: collection.total_pages,
-            total_count: collection.total_count
+            total_count: collection.total_count,
           }
         end
 
@@ -22,7 +22,7 @@ module Api
           collection = results.page(page)
           {
             collection: collection,
-            meta: kaminari_params(collection)
+            meta: kaminari_params(collection),
           }
         end
 
@@ -31,7 +31,7 @@ module Api
         end
 
         def prop_params(params)
-          params.merge(propser_id: current_user.id)
+          params.merge(propser_id: current_user.id, organisation_id: current_organisation.id)
         end
 
         def props_repository
@@ -59,7 +59,10 @@ module Api
           optional :show_upvote_status_for_user_id, type: Integer
         end
         get do
-          prop_search = props_repository.search declared(props_params(params))
+          search_params = declared(props_params(params)).merge(
+            organisation_id: current_organisation.id,
+          )
+          prop_search = props_repository.search(search_params)
           params[:page] = params[:page] || 1 if params[:propser_id].present?
 
           results = paginated_result(prop_search.results, params[:page])
@@ -71,7 +74,7 @@ module Api
 
         desc 'Returns props count'
         get :total do
-          Prop.count
+          current_organisation.props.count
         end
 
         desc 'Creates a new prop'

@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe Api::V1::Props do
-  let(:user) { create(:user) }
+  let(:membership) { create(:membership) }
+  let(:user) { membership.user }
+  let(:organisation) { membership.organisation }
   let(:receivers) { create_list(:user, 3) }
 
   describe 'GET /api/v1/props' do
@@ -14,10 +16,10 @@ describe Api::V1::Props do
 
     context 'user is signed in' do
       let(:params) { { propser_id: user.id }.as_json }
-      let!(:props) { create_list(:prop, 2, propser: user) }
+      let!(:props) { create_list(:prop, 2, propser: user, organisation: organisation) }
 
       before do
-        sign_in(user)
+        sign_in(membership)
         get '/api/v1/props', params
       end
 
@@ -51,10 +53,10 @@ describe Api::V1::Props do
     end
 
     context 'user is signed in' do
-      let!(:props) { create_list(:prop, 3, propser: user) }
+      let!(:props) { create_list(:prop, 3, propser: user, organisation: organisation) }
 
       before do
-        sign_in(user)
+        sign_in(membership)
         get '/api/v1/props/total'
       end
 
@@ -85,7 +87,7 @@ describe Api::V1::Props do
 
     context 'user is signed in' do
       before do
-        sign_in(user)
+        sign_in(membership)
         allow_any_instance_of(Notifier::SlackNotifier).to receive(:notify).and_return(double(ping: true))
         post '/api/v1/props', prop_params
       end
@@ -122,7 +124,7 @@ describe Api::V1::Props do
     end
 
     context 'user is signed in' do
-      before { sign_in(user) }
+      before { sign_in(membership) }
       after { sign_out }
 
       it 'increases prop upvotes count by 1' do
@@ -134,7 +136,7 @@ describe Api::V1::Props do
 
   describe 'DELETE /api/v1/props/:prop_id/undo_upvotes' do
     let(:prop) { create(:prop) }
-    let(:user2) { create(:user) }
+    let(:membership2) { create(:membership) }
     let(:upvote) { create(:upvote, prop: prop, user: user2) }
 
     context 'user is a guest' do
@@ -145,7 +147,7 @@ describe Api::V1::Props do
     end
 
     context 'user tries to undo upvote of different user' do
-      before { sign_in(user2) }
+      before { sign_in(membership2) }
       after { sign_out }
 
       it 'undoes the upvote' do
@@ -154,7 +156,7 @@ describe Api::V1::Props do
       end
     end
     context 'user undoes own upvote' do
-      before { sign_in(user) }
+      before { sign_in(membership) }
       after { sign_out }
 
       it 'undoes the upvote' do

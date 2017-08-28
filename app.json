@@ -13,21 +13,19 @@
       "APP_DOMAIN": {
         "value": "props.changeme"
       },
-      "GAPPS_DOMAIN_NAME": {
-        "value": "gapps_domain_name"
-      },
-      "EXTRA_DOMAIN_NAMES": {
-        "value": "example.co, example.com"
+      "SINGLE_DOMAIN_MODE": {
+        "value": "",
+        "required": false
       },
       "EMAILS_DEFAULT_FROM": {
         "value": "props@example.com",
         "required": false
       },
-      "OMNIAUTH_KEY": {
-        "value": "omniauth_key"
+      "SLACK_CLIENT_ID": {
+        "value": "slack_client_id"
       },
-      "OMNIAUTH_SECRET": {
-        "value": "omniauth_secret"
+      "SLACK_CLIENT_SECRET": {
+        "value": "slack_client_secret"
       },
       "SECRET_KEY_BASE": {
         "generator": "secret"
@@ -38,14 +36,6 @@
       },
       "SENDGRID_USER_NAME": {
         "value": "sendgrid_user_name",
-        "required": false
-      },
-      "SLACK_DEFAULT_CHANNEL": {
-        "value": "default_channel",
-        "required": false
-      },
-      "SLACK_TOKEN": {
-        "value": "slack_token",
         "required": false
       },
       "REDIS_PROVIDER": {
