@@ -19,7 +19,7 @@ jobs:
       - save_cache:
           key: node-{{ checksum "yarn.lock"}}
           paths:
-            - ./node_modules
+            - node_modules
       - restore_cache:
           key: ruby-{{ checksum "Gemfile.lock" }}
       - run:
