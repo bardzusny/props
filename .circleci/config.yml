@@ -1,11 +1,9 @@
-#caching to be added
-#add notifier
 version: 2
 jobs:
   build:
-    working_directory: /home/ubuntu/props
+    working_directory: ~/props
     docker:
-      - image: quay.io/netguru/ng-ruby:2.2.3
+      - image: circleci/ruby:2.3-node-browsers
         env:
           - RAILS_ENV=test
           - RACK_ENV=test
@@ -23,38 +21,25 @@ jobs:
       - checkout
       - run:
           name: Install System Dependencies
-          command: apt-get update && apt-get install -y libpq-dev
-      - run:
-          name: Install Node
-          command: /opt/node/install
-      - run:
-          name: Install Yarn
-          command: |
-            apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
-            echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-            apt-get update -qq
-            apt-get install -y -qq yarn
+          command: sudo apt-get update && sudo apt-get install -y libpq-dev
       - run:
           name: Get Yarn Dependencies
           command: yarn
       - run:
           name: Install Chrome
           command: |
-            apt-get update
-            apt-get install -y libappindicator1 fonts-liberation
-            apt-get install -y gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1 libxss1 xdg-utils
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+            sudo apt-get update
+            sudo apt-get install -y libappindicator1 fonts-liberation
+            sudo apt-get install -y gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1 libxss1 xdg-utils
+            sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo dpkg -i google-chrome-stable_current_amd64.deb; sudo apt-get -fy install
       - run:
           name: Install Xvfb
           command: |
-            apt-get update
-            apt-get -y install xorg
-            apt-get -y install xvfb
-            apt-get -y install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
-      - run:
-          name: Copy Secrets
-          command: cp config/secrets.yml.sample config/secrets.yml
+            sudo apt-get update
+            sudo apt-get -y install xorg
+            sudo apt-get -y install xvfb
+            sudo apt-get -y install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
       - run:
           name: Install Ruby Dependencies
           command: bundle install
