@@ -12,16 +12,16 @@ jobs:
     steps:
       - checkout
       - restore-cache:
-          keys:
-            - bundle-{{ checksum "Gemfile.lock" }}
-            - yarn-{{ checksum "package.json" }}
+          key: node-{{ checksum "package.json"}}
       - run:
           name: Get Yarn Dependencies
           command: yarn
       - save_cache:
-          key: yarn-{{ checksum "package.json" }}
+          key: node-{{ checksum "package.json"}}
           paths:
-            - node_modules/
+            - ./node_modules
+      - restore_cache:
+          key: bundle-{{ checksum "Gemfile.lock" }}
       - run:
           name: Install Ruby Dependencies
           command: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development
