@@ -3,59 +3,41 @@ jobs:
   build:
     working_directory: ~/props
     docker:
-      - image: circleci/ruby:2.3-node-browsers
-        env:
-          - RAILS_ENV=test
-          - RACK_ENV=test
-          - PG_HOST=localhost
-          - PG_USER=ubuntu
-      - image: postgres:9.5
-        #lub po prostu env:
+      - image: circleci/ruby:2.3-node
         environment:
-          - POSTGRES_USER=ubuntu
-          - POSTGRES_DB=circle_ruby_test
-    environment:
-      - CHROME_BIN: /usr/bin/google-chrome
-      - DISPLAY: :99.0
+          - RAILS_ENV=test
+      - image: circleci/postgres:latest
+        environment:
+          - POSTGRES_USER=props
     steps:
       - checkout
-      - run:
-          name: Install System Dependencies
-          command: sudo apt-get update && sudo apt-get install -y libpq-dev
+      - restore-cache:
+          keys:
+            - bundle-{{ checksum "Gemfile.lock" }}
+            - yarn-{{ checksum "yarn.lock" }}
       - run:
           name: Get Yarn Dependencies
           command: yarn
-      - run:
-          name: Install Chrome
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y libappindicator1 fonts-liberation
-            sudo apt-get install -y gconf-service libasound2 libgconf2-4 libnspr4 libnss3 libpango1.0-0 libx11-xcb1 libxss1 xdg-utils
-            sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo dpkg -i google-chrome-stable_current_amd64.deb; sudo apt-get -fy install
-      - run:
-          name: Install Xvfb
-          command: |
-            sudo apt-get update
-            sudo apt-get -y install xorg
-            sudo apt-get -y install xvfb
-            sudo apt-get -y install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
+      - save_cache:
+          key: yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
       - run:
           name: Install Ruby Dependencies
-          command: bundle install
+          command: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development
+      - save-cache:
+          key: bundle-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
       - run:
           name: Copy database.yml
-          command: cp config/database.yml.circleci config/database.yml
+          command: cp config/database.yml.sample config/database.yml
       - run:
           name: Create DB
           command: bundle exec rake db:create db:schema:load --trace
       - run:
           name: DB Migrations
           command: bundle exec rake db:migrate
-      - run:
-          name: Starting Xvfb (for Browser Tests)
-          command: Xvfb :99 -screen 0 1280x1024x24
-          background: true
       - run:
           name: Run Yarn Tests
           command: yarn test

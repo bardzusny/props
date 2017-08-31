@@ -1,9 +1,0 @@
-test:
-  adapter:  postgresql
-  host:     localhost
-  encoding: unicode
-  database: circle_ruby_test
-  pool:     5
-  username: ubuntu
-  password:
-  template: template0
