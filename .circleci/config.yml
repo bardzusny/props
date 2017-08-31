@@ -12,21 +12,21 @@ jobs:
     steps:
       - checkout
       - restore-cache:
-          key: node-{{ checksum "package.json"}}
+          key: node-{{ checksum "yarn.lock"}}
       - run:
           name: Get Yarn Dependencies
           command: yarn
       - save_cache:
-          key: node-{{ checksum "package.json"}}
+          key: node-{{ checksum "yarn.lock"}}
           paths:
             - ./node_modules
       - restore_cache:
-          key: bundle-{{ checksum "Gemfile.lock" }}
+          key: ruby-{{ checksum "Gemfile.lock" }}
       - run:
           name: Install Ruby Dependencies
           command: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development
       - save-cache:
-          key: bundle-{{ checksum "Gemfile.lock" }}
+          key: ruby-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
       - run:
@@ -56,3 +56,6 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "production" ]; then
               bundle exec cap production deploy
             fi
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/5d08569c0fcb0d849f50
