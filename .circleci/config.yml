@@ -57,7 +57,7 @@ jobs:
           key: ruby-{{ checksum "Gemfile.lock" }}
       - run:
           name: Install Ruby Dependencies
-          command: bundle --path vendor/bundle
+          command: bundle --path vendor/bundle --without development
       - run:
           name: Copy database.yml
           command: cp config/database.yml.sample config/database.yml
