@@ -29,6 +29,16 @@ jobs:
           key: ruby-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+  run_tests:
+    working_directory: ~/props
+    docker:
+      - image: circleci/ruby:2.3-node
+        environment:
+          - RAILS_ENV=test
+      - image: circleci/postgres:latest
+        environment:
+          - POSTGRES_USER=props
+    steps:
       - run:
           name: Copy database.yml
           command: cp config/database.yml.sample config/database.yml
@@ -56,6 +66,14 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "production" ]; then
               bundle exec cap production deploy
             fi
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - run_tests:
+          requires:
+            - build
 notify:
   webhooks:
     - url: https://webhooks.gitter.im/e/5d08569c0fcb0d849f50
