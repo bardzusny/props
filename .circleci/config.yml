@@ -52,12 +52,12 @@ jobs:
       - restore_cache:
           key: v1-repo-{{ checksum ".circle-sha" }}
       - restore-cache:
-        key: node-{{ checksum "yarn.lock"}}
+          key: node-{{ checksum "yarn.lock"}}
       - restore_cache:
           key: ruby-{{ checksum "Gemfile.lock" }}
       - run:
-        name: Install Ruby Dependencies
-        command: bundle --path vendor/bundle
+          name: Install Ruby Dependencies
+          command: bundle --path vendor/bundle
       - run:
           name: Copy database.yml
           command: cp config/database.yml.sample config/database.yml
