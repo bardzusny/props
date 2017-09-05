@@ -92,6 +92,8 @@ workflows:
       - build
       - hold:
           type: approval
+          requires:
+            - build
       - run_tests:
           requires:
             - hold
