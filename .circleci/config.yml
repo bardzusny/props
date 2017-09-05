@@ -89,11 +89,12 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build:
+      - build
+      - hold:
           type: approval
       - run_tests:
           requires:
-            - build
+            - hold
 notify:
   webhooks:
     - url: https://webhooks.gitter.im/e/5d08569c0fcb0d849f50
