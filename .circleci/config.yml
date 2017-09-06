@@ -77,3 +77,9 @@ workflows:
       - run_tests:
           requires:
             - build
+      - deploy_staging:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only: staging
