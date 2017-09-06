@@ -11,6 +11,8 @@ jobs:
           - POSTGRES_USER=props
     steps:
       - checkout
+      - attach_workspace:
+        at: ~/props
       - restore-cache:
           key: node-{{ checksum "yarn.lock"}}
       - run:
@@ -29,13 +31,11 @@ jobs:
           key: ruby-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - save_cache:
-          key: v1-repo-{{ checksum ".circle-sha" }}
+      - persist_to_workspace:
+          root: .
           paths:
-            - ~/props
+            - vendor/bundle
+            - node_modules
   run_tests:
     working_directory: ~/props
     docker:
@@ -46,15 +46,9 @@ jobs:
         environment:
           - POSTGRES_USER=props
     steps:
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache:
-          key: v1-repo-{{ checksum ".circle-sha" }}
-      - restore-cache:
-          key: node-{{ checksum "yarn.lock"}}
-      - restore_cache:
-          key: ruby-{{ checksum "Gemfile.lock" }}
+      - checkout
+      - attach_workspace:
+          at: ~/props
       - run:
           name: Install Ruby Dependencies
           command: bundle --path vendor/bundle --without development
@@ -89,10 +83,7 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              only: staging
+      - build
       - run_tests:
           requires:
             - build
