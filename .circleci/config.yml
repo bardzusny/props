@@ -74,6 +74,7 @@ jobs:
       - attach_workspace:
           at: ~/props
       - run: bundle --path vendor/bundle --without development
+      - run: bundle exec cap production deploy
 
 workflows:
   version: 2
@@ -94,4 +95,8 @@ workflows:
             - run_tests
           filters:
             branches:
-              only: circle-2.0
+              only: production
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/5d08569c0fcb0d849f50
