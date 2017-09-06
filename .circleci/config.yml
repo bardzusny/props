@@ -82,4 +82,4 @@ workflows:
             - run_tests
           filters:
             branches:
-              only: staging
+              only: circle-2.0
