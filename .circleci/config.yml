@@ -35,6 +35,7 @@ jobs:
           paths:
             - vendor/bundle
             - node_modules
+
   run_tests:
     <<: *defaults
     steps:
@@ -47,18 +48,29 @@ jobs:
       - run: bundle exec rake db:migrate
       - run: yarn test
       - run: bundle exec rspec --colour --profile 10 --order rand spec --format progress
-      - deploy:
-          name: Deploy To Staging
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "mobile" ]; then
-              git push git@heroku.com:netguru-props-staging.git
-            fi
+
+  deploy_staging:
+    machine:
+      enabled: true
+    working_directory: ~/props
+      environment:
+        HEROKU_APP: "HEROKU APP NAME"
+    steps:
+      - checkout
+      - run:
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh
+
+  deploy_production:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/props
       - deploy:
           name: "Deploy to production"
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "production" ]; then
-              bundle exec cap production deploy
-            fi
+          #command: bundle exec cap production deploy
+
 workflows:
   version: 2
   build-and-deploy:
@@ -67,3 +79,15 @@ workflows:
       - run_tests:
           requires:
             - build
+      - deploy_staging:
+          filters:
+            branches:
+              - staging
+          requires:
+            - run_tests
+      - deploy_production:
+          filters:
+            branches:
+              - production
+          requires:
+            - run_tests
