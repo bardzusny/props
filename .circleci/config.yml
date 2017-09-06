@@ -60,6 +60,12 @@ jobs:
       - run:
           name: Setup Heroku
           command: bash .circleci/setup-heroku.sh
+      - run:
+          command: |
+            git push heroku staging:master
+            heroku run rake db:migrate
+            sleep 5 # sleep for 5 seconds to wait for dynos
+            heroku restart
 
   deploy_production:
     <<: *defaults
@@ -78,6 +84,12 @@ workflows:
           requires:
             - build
       - deploy_staging:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only: staging
+      - deploy_production:
           requires:
             - run_tests
           filters:
