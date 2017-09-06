@@ -53,8 +53,8 @@ jobs:
     machine:
       enabled: true
     working_directory: ~/props
-      environment:
-        HEROKU_APP: "HEROKU APP NAME"
+    environment:
+      HEROKU_APP: "HEROKU APP NAME"
     steps:
       - checkout
       - run:
