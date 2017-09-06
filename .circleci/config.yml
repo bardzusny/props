@@ -88,11 +88,11 @@ jobs:
 workflows:
   version: 2
   build-and-deploy:
-    filter:
-      branches:
-         only: staging
     jobs:
-      - build
+      - build:
+          filter:
+            branches:
+              only: staging
       - run_tests:
           requires:
-            - hold
+            - build
