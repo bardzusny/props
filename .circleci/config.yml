@@ -67,6 +67,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/props
+      - run: bundle --path vendor/bundle --without development
       - deploy:
           name: "Deploy to production"
           #command: bundle exec cap production deploy
@@ -80,14 +81,14 @@ workflows:
           requires:
             - build
       - deploy_staging:
+          requires:
+            - run_tests
           filters:
             branches:
               - staging
+      - deploy_production:
           requires:
             - run_tests
-      - deploy_production:
           filters:
             branches:
               - production
-          requires:
-            - run_tests
