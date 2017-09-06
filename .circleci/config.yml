@@ -18,18 +18,14 @@ jobs:
           at: ~/props
       - restore-cache:
           key: node-{{ checksum "yarn.lock"}}
-      - run:
-          name: Get Yarn Dependencies
-          command: yarn
+      - run: yarn
       - save_cache:
           key: node-{{ checksum "yarn.lock"}}
           paths:
             - node_modules
       - restore_cache:
           key: ruby-{{ checksum "Gemfile.lock" }}
-      - run:
-          name: Install Ruby Dependencies
-          command: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development
+      - run: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development
       - save-cache:
           key: ruby-{{ checksum "Gemfile.lock" }}
           paths:
@@ -42,11 +38,9 @@ jobs:
   run_tests:
     <<: *defaults
     steps:
+      - checkout
       - attach_workspace:
           at: ~/props
-      - run:
-          name: Install Ruby Dependencies
-          command: bundle --path vendor/bundle --without development
       - run:
           name: Copy database.yml
           command: cp config/database.yml.sample config/database.yml
