@@ -41,21 +41,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/props
-      - run:
-          name: Copy database.yml
-          command: cp config/database.yml.sample config/database.yml
-      - run:
-          name: Create DB
-          command: bundle exec rake db:create db:schema:load --trace
-      - run:
-          name: DB Migrations
-          command: bundle exec rake db:migrate
-      - run:
-          name: Run Yarn Tests
-          command: yarn test
-      - run:
-          name: Run Rspec Tests
-          command: bundle exec rspec --colour --profile 10 --order rand spec --format progress
+      - run: bundle --path vendor/bundle --without development
+      - run: cp config/database.yml.sample config/database.yml
+      - run: bundle exec rake db:create db:schema:load --trace
+      - run: bundle exec rake db:migrate
+      - run: yarn test
+      - run: bundle exec rspec --colour --profile 10 --order rand spec --format progress
       - deploy:
           name: Deploy To Staging
           command: |
