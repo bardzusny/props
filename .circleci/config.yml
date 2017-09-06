@@ -92,7 +92,7 @@ workflows:
       - build:
           filters:
             branches:
-              only: staging
+              only: circle-2.0
       - run_tests:
           requires:
             - build
