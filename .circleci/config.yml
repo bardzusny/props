@@ -1,14 +1,17 @@
+defaults: &defaults
+  working_directory: ~/props
+  docker:
+    - image: circleci/ruby:2.3-node
+      environment:
+        - RAILS_ENV=test
+    - image: circleci/postgres:latest
+      environment:
+        - POSTGRES_USER=props
+
 version: 2
 jobs:
   build:
-    working_directory: ~/props
-    docker:
-      - image: circleci/ruby:2.3-node
-        environment:
-          - RAILS_ENV=test
-      - image: circleci/postgres:latest
-        environment:
-          - POSTGRES_USER=props
+    <<: *defaults
     steps:
       - checkout
       - attach_workspace:
@@ -37,16 +40,8 @@ jobs:
             - vendor/bundle
             - node_modules
   run_tests:
-    working_directory: ~/props
-    docker:
-      - image: circleci/ruby:2.3-node
-        environment:
-          - RAILS_ENV=test
-      - image: circleci/postgres:latest
-        environment:
-          - POSTGRES_USER=props
+    <<: *defaults
     steps:
-      - checkout
       - attach_workspace:
           at: ~/props
       - run:
