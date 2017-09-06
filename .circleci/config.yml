@@ -68,9 +68,6 @@ jobs:
       - attach_workspace:
           at: ~/props
       - run: bundle --path vendor/bundle --without development
-      - deploy:
-          name: "Deploy to production"
-          #command: bundle exec cap production deploy
 
 workflows:
   version: 2
@@ -86,9 +83,3 @@ workflows:
           filters:
             branches:
               - staging
-      - deploy_production:
-          requires:
-            - run_tests
-          filters:
-            branches:
-              - production
