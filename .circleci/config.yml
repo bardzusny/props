@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: ~/props
+          at: ~/props
       - restore-cache:
           key: node-{{ checksum "yarn.lock"}}
       - run:
