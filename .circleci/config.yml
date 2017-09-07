@@ -49,12 +49,40 @@ jobs:
       - run: yarn test
       - run: bundle exec rspec --colour --profile 10 --order rand spec --format progress
 
+  deploy_master:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: ruby-{{ checksum "deployment/Gemfile.lock" }}
+      - run:
+          name: Install Ruby Dependencies
+          command: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development
+          working_directory: deployment
+      - save-cache:
+          key: ruby-{{ checksum "Gemfile.lock" }}
+          paths:
+            - deployment/vendor
+      - run:
+          name: Run Cap Master Deploy
+          command: bundle exec cap staging deploy
+          working_directory: deployment
+
+  deploy_production:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/props
+      - run: bundle --path vendor/bundle --without development
+      - run: bundle exec cap production deploy
+
   deploy_staging:
     machine:
       enabled: true
     working_directory: ~/props
     environment:
-      HEROKU_APP: "HEROKU APP NAME"
+      HEROKU_APP: "netguru-props-staging"
     steps:
       - checkout
       - run:
@@ -67,14 +95,24 @@ jobs:
             sleep 5 # sleep for 5 seconds to wait for dynos
             heroku restart
 
-  deploy_production:
-    <<: *defaults
+  deploy_paas_staging:
+    machine:
+      enabled: true
+    working_directory: ~/props
+    environment:
+      HEROKU_APP: "netguru-props-paas-prototype"
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/props
-      - run: bundle --path vendor/bundle --without development
-      - run: bundle exec cap production deploy
+      - run:
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh
+      - run:
+          command: |
+            git push heroku staging:master
+            heroku run rake db:migrate
+            sleep 5 # sleep for 5 seconds to wait for dynos
+            heroku restart
+
 
 workflows:
   version: 2
@@ -84,18 +122,30 @@ workflows:
       - run_tests:
           requires:
             - build
-      - deploy_staging:
+      - deploy_master:
           requires:
             - run_tests
           filters:
             branches:
-              only: staging
+              only: master
       - deploy_production:
           requires:
             - run_tests
           filters:
             branches:
               only: production
+      - deploy_staging:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only: new-js-architecture
+      - deploy_paas_staging:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only: paas_prototype
 
 notify:
   webhooks:
