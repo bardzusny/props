@@ -77,43 +77,6 @@ jobs:
       - run: bundle --path vendor/bundle --without development
       - run: bundle exec cap production deploy
 
-  deploy_staging:
-    machine:
-      enabled: true
-    working_directory: ~/props
-    environment:
-      HEROKU_APP: "netguru-props-staging"
-    steps:
-      - checkout
-      - run:
-          name: Setup Heroku
-          command: bash .circleci/setup-heroku.sh
-      - run:
-          command: |
-            git push heroku staging:master
-            heroku run rake db:migrate
-            sleep 5 # sleep for 5 seconds to wait for dynos
-            heroku restart
-
-  deploy_paas_staging:
-    machine:
-      enabled: true
-    working_directory: ~/props
-    environment:
-      HEROKU_APP: "netguru-props-paas-prototype"
-    steps:
-      - checkout
-      - run:
-          name: Setup Heroku
-          command: bash .circleci/setup-heroku.sh
-      - run:
-          command: |
-            git push heroku staging:master
-            heroku run rake db:migrate
-            sleep 5 # sleep for 5 seconds to wait for dynos
-            heroku restart
-
-
 workflows:
   version: 2
   build-and-deploy:
@@ -134,18 +97,6 @@ workflows:
           filters:
             branches:
               only: production
-      - deploy_staging:
-          requires:
-            - run_tests
-          filters:
-            branches:
-              only: new-js-architecture
-      - deploy_paas_staging:
-          requires:
-            - run_tests
-          filters:
-            branches:
-              only: paas_prototype
 
 notify:
   webhooks:
