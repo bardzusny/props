@@ -60,7 +60,7 @@ jobs:
           command: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development
           working_directory: deployment
       - save-cache:
-          key: ruby-{{ checksum "Gemfile.lock" }}
+          key: ruby-{{ checksum "deployment/Gemfile.lock" }}
           paths:
             - deployment/vendor
       - run:
